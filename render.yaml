@@ -1,0 +1,12 @@
+# Render Blueprint: one free Node web service running Next.js + Socket.IO.
+services:
+  - type: web
+    name: wickword
+    runtime: node
+    plan: free
+    buildCommand: npm ci && npm run build
+    startCommand: npm start
+    healthCheckPath: /
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
