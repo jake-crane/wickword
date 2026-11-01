@@ -141,7 +141,7 @@ export function GameRoom({ code }: { code: string }) {
               <>
                 <Players
                   players={state.players}
-                  activeId={state.turn.playerId}
+                  turn={state.turn}
                   hostId={state.hostId}
                   me={me}
                   flash={flash}
