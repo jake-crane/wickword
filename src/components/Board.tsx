@@ -91,6 +91,16 @@ export function Board({
 
   const myReject = flash?.ev.kind === "reject" && flash.ev.playerId === me ? flash : null;
   const boom = flash?.ev.kind === "boom" ? flash : null;
+
+  // Shake in place rather than remounting the input, which would drop focus mid-turn.
+  useEffect(() => {
+    if (!myReject) return;
+    input.current?.focus();
+    input.current?.animate(
+      [{ transform: "translateX(0)" }, { transform: "translateX(-5px)" }, { transform: "translateX(5px)" }, { transform: "translateX(0)" }],
+      { duration: 250, iterations: 2, easing: "ease-in-out" },
+    );
+  }, [myReject?.key]); // eslint-disable-line react-hooks/exhaustive-deps
   const shown = mine ? value.toLowerCase() : turn.typing;
 
   return (
@@ -124,7 +134,6 @@ export function Board({
         }}
       >
         <input
-          key={myReject?.key}
           ref={input}
           value={value}
           disabled={!mine}
@@ -139,7 +148,7 @@ export function Board({
           autoCapitalize="off"
           spellCheck={false}
           className={`w-full rounded-xl border-2 bg-ink px-4 py-3 text-center font-mono text-xl uppercase outline-none transition disabled:opacity-40 ${
-            myReject ? "animate-nudge border-danger" : "border-line focus:border-ember"
+            myReject ? "border-danger" : "border-line focus:border-ember"
           }`}
         />
         <p className="mt-2 h-5 text-center text-sm text-danger">
